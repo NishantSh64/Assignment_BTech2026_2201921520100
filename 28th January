@@ -1,1 +1,68 @@
+class Book {
+    private String title;
+    private String author;
+    private String isbn;
 
+    public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+    // Getters
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void displayBookDetails() {
+        System.out.println("Title: " + title + ", Author: " + author + ", ISBN: " + isbn);
+    }
+}
+
+
+class Library {
+    private ArrayList<Book> books;
+
+    
+    public Library() {
+        books = new ArrayList<>();
+    }
+
+    
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    
+    public void displayBooks() {
+        System.out.println("Library contains the following books:");
+        for (Book book : books) {
+            book.displayBookDetails();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Library library = new Library();
+
+        
+        Book book1 = new Book("Java Programming", "John Doe", "12345");
+        Book book2 = new Book("Object-Oriented Programming", "Jane Smith", "67890");
+
+        
+        library.addBook(book1);
+        library.addBook(book2);
+
+        // Display all books in the library
+        library.displayBooks();
+    }
+}
