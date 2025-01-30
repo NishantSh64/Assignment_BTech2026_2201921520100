@@ -55,73 +55,14 @@ class Library {
     }
 }
 
-// Online Shopping System
-class Product {
-    private int productId;
-    private String name;
-    private double price;
-    private int stockQuantity;
-
-    public Product(int productId, String name, double price, int stockQuantity) {
-        this.productId = productId;
-        this.name = name;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-    }
-
-    public boolean isAvailable(int quantity) { return stockQuantity >= quantity; }
-    public void reduceStock(int quantity) { stockQuantity -= quantity; }
-    public String getName() { return name; }
-    public double getPrice() { return price; }
-}
-
-class Customer {
-    private int customerId;
-    private String name;
-    private List<Product> cart = new ArrayList<>();
-
-    public Customer(int customerId, String name) {
-        this.customerId = customerId;
-        this.name = name;
-    }
-
-    public void addToCart(Product product) { cart.add(product); }
-}
-
-class Shop {
-    private List<Product> products = new ArrayList<>();
-
-    public void addProduct(Product product) { products.add(product); }
-
-    public void checkout(Customer customer) {
-        double total = 0;
-        for (Product product : customer.cart) {
-            if (product.isAvailable(1)) {
-                product.reduceStock(1);
-                total += product.getPrice();
-            } else {
-                System.out.println(product.getName() + " is out of stock.");
-            }
-        }
-        System.out.println("Total amount: Rs." + total);
-    }
-}
 
 public class Main {
     public static void main(String[] args) {
-        // Library System Test
         Library library = new Library();
         Book book1 = new Book(1, "Java Basics", "John Doe");
         library.addBook(book1);
         library.issueBook(1);
         library.returnBook(1);
 
-        // Shopping System Test
-        Shop shop = new Shop();
-        Product product1 = new Product(101, "Laptop", 50000, 5);
-        shop.addProduct(product1);
-        Customer customer = new Customer(1, "Nishant Sharma");
-        customer.addToCart(product1);
-        shop.checkout(customer);
     }
 }
