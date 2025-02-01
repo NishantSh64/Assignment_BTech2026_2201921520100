@@ -1,0 +1,80 @@
+// Online Food Ordering System in Java
+
+import java.util.*;
+
+class FoodItem {
+    int id;
+    String name;
+    double price;
+
+    FoodItem(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return id + ". " + name + " - $" + price;
+    }
+}
+
+class Order {
+    List<FoodItem> items = new ArrayList<>();
+
+    void addItem(FoodItem item) {
+        items.add(item);
+    }
+
+    double calculateTotal() {
+        double total = 0;
+        for (FoodItem item : items) {
+            total += item.price;
+        }
+        return total;
+    }
+
+    void displayOrder() {
+        System.out.println("Your Order:");
+        for (FoodItem item : items) {
+            System.out.println(item);
+        }
+        System.out.println("Total: $" + calculateTotal());
+    }
+}
+
+public class OnlineFoodOrderingSystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        List<FoodItem> menu = Arrays.asList(
+            new FoodItem(1, "Pizza", 8.99),
+            new FoodItem(2, "Burger", 5.99),
+            new FoodItem(3, "Pasta", 7.49),
+            new FoodItem(4, "Salad", 4.99)
+        );
+
+        Order order = new Order();
+        int choice;
+
+        do {
+            System.out.println("Menu:");
+            for (FoodItem item : menu) {
+                System.out.println(item);
+            }
+            System.out.println("0. Complete Order");
+
+            System.out.print("Enter the item number to add to your order: ");
+            choice = sc.nextInt();
+
+            if (choice > 0 && choice <= menu.size()) {
+                order.addItem(menu.get(choice - 1));
+                System.out.println(menu.get(choice - 1).name + " added to your order.");
+            } else if (choice != 0) {
+                System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 0);
+
+        order.displayOrder();
+        sc.close();
+    }
+}
