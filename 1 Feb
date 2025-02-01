@@ -1,0 +1,124 @@
+// Banking System Implementation
+
+import java.util.*;
+
+// Base Account class
+abstract class Account {
+    protected String accountNumber;
+    protected String accountHolderName;
+    protected double balance;
+
+    public Account(String accountNumber, String accountHolderName, double balance) {
+        this.accountNumber = accountNumber;
+        this.accountHolderName = accountHolderName;
+        this.balance = balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited: " + amount);
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount);
+        } else {
+            System.out.println("Insufficient balance or invalid amount.");
+        }
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public abstract void displayAccountDetails();
+}
+
+// SavingsAccount class
+class SavingsAccount extends Account {
+    private double interestRate;
+
+    public SavingsAccount(String accountNumber, String accountHolderName, double balance, double interestRate) {
+        super(accountNumber, accountHolderName, balance);
+        this.interestRate = interestRate;
+    }
+
+    public void applyInterest() {
+        double interest = balance * (interestRate / 100);
+        balance += interest;
+        System.out.println("Interest Applied: " + interest);
+    }
+
+    @Override
+    public void displayAccountDetails() {
+        System.out.println("Savings Account - Account Number: " + accountNumber + ", Holder: " + accountHolderName + ", Balance: " + balance);
+    }
+}
+
+// CurrentAccount class
+class CurrentAccount extends Account {
+    public CurrentAccount(String accountNumber, String accountHolderName, double balance) {
+        super(accountNumber, accountHolderName, balance);
+    }
+
+    @Override
+    public void displayAccountDetails() {
+        System.out.println("Current Account - Account Number: " + accountNumber + ", Holder: " + accountHolderName + ", Balance: " + balance);
+    }
+}
+
+// Bank class
+class Bank {
+    private List<Account> accounts = new ArrayList<>();
+
+    public void createSavingsAccount(String accountNumber, String holderName, double initialBalance, double interestRate) {
+        accounts.add(new SavingsAccount(accountNumber, holderName, initialBalance, interestRate));
+        System.out.println("Savings Account Created for " + holderName);
+    }
+
+    public void createCurrentAccount(String accountNumber, String holderName, double initialBalance) {
+        accounts.add(new CurrentAccount(accountNumber, holderName, initialBalance));
+        System.out.println("Current Account Created for " + holderName);
+    }
+
+    public Account findAccount(String accountNumber) {
+        for (Account acc : accounts) {
+            if (acc.accountNumber.equals(accountNumber)) {
+                return acc;
+            }
+        }
+        return null;
+    }
+
+    public void displayAllAccounts() {
+        for (Account acc : accounts) {
+            acc.displayAccountDetails();
+        }
+    }
+}
+
+// Main class to run the Banking System
+public class BankingSystem {
+    public static void main(String[] args) {
+        Bank bank = new Bank();
+
+        bank.createSavingsAccount("SA101", "Nishant Sharma", 5000, 4);
+        bank.createCurrentAccount("CA102", "Amit Singh", 10000);
+
+        Account acc1 = bank.findAccount("SA101");
+        if (acc1 != null) {
+            acc1.deposit(2000);
+            acc1.withdraw(1000);
+            if (acc1 instanceof SavingsAccount) {
+                ((SavingsAccount) acc1).applyInterest();
+            }
+            acc1.displayAccountDetails();
+        }
+
+        System.out.println("\nAll Accounts in the Bank:");
+        bank.displayAllAccounts();
+    }
+}
