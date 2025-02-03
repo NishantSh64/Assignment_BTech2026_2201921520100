@@ -1,0 +1,140 @@
+// Room.java
+class Room {
+    int roomNumber;
+    String roomType;
+    double pricePerNight;
+    boolean isBooked;
+
+    public Room(int roomNumber, String roomType, double pricePerNight) {
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
+        this.pricePerNight = pricePerNight;
+        this.isBooked = false;
+    }
+
+    public void bookRoom() {
+        if (!isBooked) {
+            isBooked = true;
+            System.out.println("Room " + roomNumber + " booked successfully.");
+        } else {
+            System.out.println("Room " + roomNumber + " is already booked.");
+        }
+    }
+
+    public void vacateRoom() {
+        if (isBooked) {
+            isBooked = false;
+            System.out.println("Room " + roomNumber + " is now available.");
+        } else {
+            System.out.println("Room " + roomNumber + " is already vacant.");
+        }
+    }
+
+    public void displayDetails() {
+        System.out.println("Room Number: " + roomNumber);
+        System.out.println("Room Type: " + roomType);
+        System.out.println("Price per Night: Rs." + pricePerNight);
+        System.out.println("Booking Status: " + (isBooked ? "Booked" : "Available"));
+    }
+}
+
+// Guest.java
+class Guest {
+    int guestId;
+    String name;
+    Room bookedRoom;
+
+    public Guest(int guestId, String name) {
+        this.guestId = guestId;
+        this.name = name;
+        this.bookedRoom = null;
+    }
+
+    public void bookRoom(Room room) {
+        if (!room.isBooked) {
+            room.bookRoom();
+            this.bookedRoom = room;
+        } else {
+            System.out.println("Room is already booked.");
+        }
+    }
+
+    public void checkout() {
+        if (bookedRoom != null) {
+            bookedRoom.vacateRoom();
+            bookedRoom = null;
+        } else {
+            System.out.println("No room to checkout.");
+        }
+    }
+
+    public void displayBookingDetails() {
+        if (bookedRoom != null) {
+            System.out.println("Guest Name: " + name);
+            bookedRoom.displayDetails();
+        } else {
+            System.out.println("No booking found for " + name);
+        }
+    }
+}
+
+// Hotel.java
+import java.util.*;
+
+class Hotel {
+    String hotelName;
+    List<Room> rooms;
+    List<Guest> guests;
+
+    public Hotel(String hotelName) {
+        this.hotelName = hotelName;
+        this.rooms = new ArrayList<>();
+        this.guests = new ArrayList<>();
+    }
+
+    public void addRoom(Room room) {
+        rooms.add(room);
+    }
+
+    public void registerGuest(Guest guest) {
+        guests.add(guest);
+    }
+
+    public void displayAvailableRooms() {
+        System.out.println("\nAvailable Rooms in " + hotelName + ":");
+        for (Room room : rooms) {
+            if (!room.isBooked) {
+                room.displayDetails();
+                System.out.println("--------------------------");
+            }
+        }
+    }
+}
+
+// Main.java
+public class Main {
+    public static void main(String[] args) {
+        Hotel hotel = new Hotel("Grand Palace");
+
+        Room room1 = new Room(101, "Single", 1500);
+        Room room2 = new Room(102, "Double", 2500);
+        Room room3 = new Room(103, "Suite", 5000);
+
+        hotel.addRoom(room1);
+        hotel.addRoom(room2);
+        hotel.addRoom(room3);
+
+        Guest guest1 = new Guest(1, "Nishant Sharma");
+        hotel.registerGuest(guest1);
+
+        hotel.displayAvailableRooms();
+
+        guest1.bookRoom(room2); // Booking Room 102
+        guest1.displayBookingDetails();
+
+        hotel.displayAvailableRooms(); // After booking
+
+        guest1.checkout(); // Checkout
+        hotel.displayAvailableRooms(); // After checkout
+    }
+}
