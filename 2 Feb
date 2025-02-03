@@ -1,0 +1,125 @@
+// Vehicle.java
+class Vehicle {
+    int vehicleId;
+    String brand;
+    String model;
+    double rentalPricePerDay;
+
+    public Vehicle(int vehicleId, String brand, String model, double rentalPricePerDay) {
+        this.vehicleId = vehicleId;
+        this.brand = brand;
+        this.model = model;
+        this.rentalPricePerDay = rentalPricePerDay;
+    }
+
+    public double calculateRentalCost(int days) {
+        return rentalPricePerDay * days;
+    }
+
+    public void displayDetails() {
+        System.out.println("Vehicle ID: " + vehicleId);
+        System.out.println("Brand: " + brand);
+        System.out.println("Model: " + model);
+        System.out.println("Rental Price per Day: Rs." + rentalPricePerDay);
+    }
+}
+
+// Car.java
+class Car extends Vehicle {
+    int numberOfSeats;
+
+    public Car(int vehicleId, String brand, String model, double rentalPricePerDay, int numberOfSeats) {
+        super(vehicleId, brand, model, rentalPricePerDay);
+        this.numberOfSeats = numberOfSeats;
+    }
+
+    @Override
+    public double calculateRentalCost(int days) {
+        double cost = super.calculateRentalCost(days);
+        if (days > 5) {
+            cost += 500; // Additional charge for long rentals
+        }
+        return cost;
+    }
+
+    @Override
+    public void displayDetails() {
+        super.displayDetails();
+        System.out.println("Number of Seats: " + numberOfSeats);
+    }
+}
+
+// Bike.java
+class Bike extends Vehicle {
+    boolean hasHelmet;
+
+    public Bike(int vehicleId, String brand, String model, double rentalPricePerDay, boolean hasHelmet) {
+        super(vehicleId, brand, model, rentalPricePerDay);
+        this.hasHelmet = hasHelmet;
+    }
+
+    @Override
+    public double calculateRentalCost(int days) {
+        double cost = super.calculateRentalCost(days);
+        if (days > 7) {
+            cost *= 0.9; // 10% discount
+        }
+        return cost;
+    }
+
+    @Override
+    public void displayDetails() {
+        super.displayDetails();
+        System.out.println("Helmet Included: " + (hasHelmet ? "Yes" : "No"));
+    }
+}
+
+// RentalSystem.java
+import java.util.*;
+
+class RentalSystem {
+    List<Vehicle> vehicles = new ArrayList<>();
+
+    public void addVehicle(Vehicle vehicle) {
+        vehicles.add(vehicle);
+    }
+
+    public void rentVehicle(int vehicleId, int days) {
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.vehicleId == vehicleId) {
+                double cost = vehicle.calculateRentalCost(days);
+                System.out.println("\nRental Details:");
+                vehicle.displayDetails();
+                System.out.println("Total Rental Cost for " + days + " days: Rs." + cost);
+                return;
+            }
+        }
+        System.out.println("Vehicle with ID " + vehicleId + " not found.");
+    }
+
+    public void displayAllVehicles() {
+        System.out.println("\nAvailable Vehicles:");
+        for (Vehicle vehicle : vehicles) {
+            vehicle.displayDetails();
+            System.out.println("--------------------------");
+        }
+    }
+}
+
+// Main.java
+public class Main {
+    public static void main(String[] args) {
+        RentalSystem system = new RentalSystem();
+
+        Car car1 = new Car(1, "Toyota", "Corolla", 2000, 5);
+        Bike bike1 = new Bike(2, "Yamaha", "R15", 800, true);
+
+        system.addVehicle(car1);
+        system.addVehicle(bike1);
+
+        system.displayAllVehicles();
+
+        system.rentVehicle(1, 6); // Renting a car for 6 days
+        system.rentVehicle(2, 8); // Renting a bike for 8 days
+    }
+}
